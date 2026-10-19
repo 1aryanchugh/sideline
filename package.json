@@ -1,0 +1,15 @@
+{
+  "name": "sideline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A $0 live sports companion: one watchlist for scores across NFL, NBA, AFL, NRL, Premier League, UFC, golf, F1 and cricket.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.36.0"
+  }
+}

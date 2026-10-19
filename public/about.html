@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sideline: live scores and player stats</title>
+  <meta name="description" content="Every game you're watching on one screen: live scores, box scores, ball by ball and player stats across nine sports. Free, no sign-up.">
+  <link rel="canonical" href="{{ORIGIN}}/about">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sideline: every game you're watching, on one screen">
+  <meta property="og:description" content="Live scores, box scores, ball by ball and player stats across NFL, NBA, AFL, NRL, Premier League, cricket, UFC, golf and F1. Free, no sign-up.">
+  <meta property="og:url" content="{{ORIGIN}}/about">
+  <meta property="og:image" content="{{ORIGIN}}/about/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#ECEEF0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E1114" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800&display=swap">
+  <style>
+    :root {
+      --ground: #ECEEF0; --surface: #FFFFFF; --surface-2: #F4F5F7; --band: #EEF1F4;
+      --ink: #1C2127; --ink-2: #3B434C; --muted: #5C6570; --line: #DDE1E5;
+      --live: #C2251F; --win: #177A41; --accent: #1F6FEB;
+      --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+      --text: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --ground: #0E1114; --surface: #171B20; --surface-2: #20262D; --band: #222930;
+        --ink: #F1F3F5; --ink-2: #C3CAD2; --muted: #98A2AE; --line: #283039;
+        --live: #FF5A52; --win: #3DBB72; --accent: #6EA8FE;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --ground: #0E1114; --surface: #171B20; --surface-2: #20262D; --band: #222930;
+      --ink: #F1F3F5; --ink-2: #C3CAD2; --muted: #98A2AE; --line: #283039;
+      --live: #FF5A52; --win: #3DBB72; --accent: #6EA8FE;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--ground); color: var(--ink); font: 17px/1.55 var(--text); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    :focus-visible { outline: 2.5px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; }
+
+    header { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--ground) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .wordmark { font: 800 30px/1 var(--display); text-decoration: none; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; border: 0; }
+    .btn-primary { background: var(--ink); color: var(--ground); }
+    .btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+    header .btn { min-height: 40px; padding: 0 16px; font-size: 15px; }
+
+    .hero { display: grid; gap: 32px; align-items: center; padding-block: 32px 48px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: var(--live); text-transform: uppercase; letter-spacing: .06em; }
+    .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--live); animation: beat 1.4s ease-in-out infinite; }
+    @keyframes beat { 50% { opacity: .3; } }
+    h1 { font: 800 clamp(44px, 9vw, 76px)/.95 var(--display); margin: 12px 0 16px; letter-spacing: .005em; }
+    .lede { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 24px; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+    .small { font-size: 14px; color: var(--muted); margin-top: 14px; }
+    .sports { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 22px; padding: 0; list-style: none; }
+    .sports li { font-size: 13.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); }
+
+    .phone { width: min(280px, 72vw); border-radius: 34px; padding: 9px; background: #0B0D10; box-shadow: 0 30px 60px -30px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06) inset; }
+    .phone img { display: block; width: 100%; height: auto; border-radius: 26px; aspect-ratio: 560 / 1211; object-fit: cover; object-position: top; }
+    .phone.short img { aspect-ratio: 560 / 1111; }
+    .hero-shots { display: flex; justify-content: center; gap: 0; position: relative; }
+    .hero-shots .phone + .phone { margin-left: -70px; margin-top: 60px; display: none; }
+
+    section { padding-block: 40px; }
+    h2 { font: 800 clamp(32px, 6vw, 46px)/1 var(--display); margin: 0 0 10px; }
+    .sub { color: var(--ink-2); margin: 0 0 28px; max-width: 40em; }
+
+    .features { display: grid; gap: 12px; }
+    .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 18px 16px; }
+    .feature h3 { margin: 0 0 4px; font-size: 18px; }
+    .feature p { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+    .icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 10px; color: #fff; }
+    .icon svg { width: 20px; height: 20px; }
+
+    .strip { display: flex; gap: 16px; overflow-x: auto; padding: 4px 16px 18px; margin: 0 -16px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+    .strip figure { margin: 0; flex: none; scroll-snap-align: center; }
+    .strip figcaption { text-align: center; font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 10px; }
+    .strip .phone { width: 230px; }
+
+    .build { display: grid; gap: 20px; }
+    .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; overflow-x: auto; }
+    .diagram svg { display: block; width: 100%; min-width: 560px; height: auto; }
+    .facts { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .facts li { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; font-size: 15.5px; color: var(--ink-2); }
+    .facts b { color: var(--ink); }
+
+    .privacy { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 22px 20px; }
+    .privacy ul { margin: 0; padding-left: 20px; }
+    .privacy li { margin: 6px 0; color: var(--ink-2); }
+    .privacy li b { color: var(--ink); }
+    .note { font-size: 14.5px; color: var(--muted); margin-top: 16px; }
+
+    footer { padding-block: 32px 48px; margin-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14.5px; }
+    footer .wrap { display: grid; gap: 8px; }
+
+    @media (min-width: 820px) {
+      .hero { grid-template-columns: 1.1fr .9fr; padding-block: 56px 72px; }
+      .hero-shots .phone + .phone { display: block; }
+      .features { grid-template-columns: repeat(3, 1fr); }
+      .build { grid-template-columns: 1.3fr 1fr; align-items: start; }
+      .strip { justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) { .eyebrow::before { animation: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="wordmark" href="/">Sideline</a>
+      <a class="btn btn-primary" href="/">Open the app</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <div>
+        <span class="eyebrow">Live while you watch</span>
+        <h1>Every game you're watching, on one screen.</h1>
+        <p class="lede">Live scores, box scores, ball by ball and the stats of the players you care about, across nine sports at once. Free, no sign-up, nothing to download.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="/">Open Sideline</a>
+          <a class="btn btn-ghost" href="/?demo">See a sample board</a>
+        </div>
+        <p class="small">On your phone: open it, then Share → Add to Home Screen (iPhone) or ⋮ → Install app (Android).</p>
+        <ul class="sports" aria-label="Sports">
+          <li>NFL</li><li>NBA</li><li>AFL</li><li>NRL</li><li>Premier League</li><li>Cricket</li><li>UFC</li><li>Golf</li><li>F1</li>
+        </ul>
+      </div>
+      <div class="hero-shots">
+        <picture class="phone">
+          <source srcset="/about/dark-board.webp" media="(prefers-color-scheme: dark)">
+          <img src="/about/light-board.webp" width="560" height="1211" alt="The Sideline board: an NFL game and a one-day cricket match live, with a tracked quarterback's rushing-yards target reached.">
+        </picture>
+        <picture class="phone short">
+          <source srcset="/about/dark-charts.webp" media="(prefers-color-scheme: dark)">
+          <img src="/about/light-charts.webp" width="560" height="1111" alt="Ball by ball for a cricket chase: batters at the crease, this over, a runs-per-over chart and a run worm." loading="lazy">
+        </picture>
+      </div>
+    </div>
+
+    <section class="wrap" aria-labelledby="what">
+      <h2 id="what">Built for the second screen</h2>
+      <p class="sub">Follow the games you're watching and Sideline keeps them updated, every 20 seconds while something's live and not at all when the app is closed.</p>
+      <div class="features">
+        <article class="feature">
+          <div class="icon" style="background:#1F6FEB" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 4-5.4 7-5.4s5.8 1.8 7 5.4"/></svg></div>
+          <h3>Track any player</h3>
+          <p>Pin a player to the game card and choose which of their stats to show: receiving yards, rebounds, run metres, strike rate.</p>
+        </article>
+        <article class="feature">
+          <div class="icon" style="background:#1E8E4E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></svg></div>
+          <h3>Set targets</h3>
+          <p>"At least 25 rushing yards." A progress bar fills as the game goes, and the app tells you when it's reached.</p>
+        </article>
+        <article class="feature">
+          <div class="icon" style="background:#D42B25" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 18h3V11H4zM10.5 18h3V6h-3zM17 18h3v-9h-3z"/></svg></div>
+          <h3>Full box scores</h3>
+          <p>Box scores and cricket scorecards by team and innings, team stats, scoring plays, line-ups, form and injuries.</p>
+        </article>
+        <article class="feature">
+          <div class="icon" style="background:#8A3FFC" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17l5-6 4 3 5-7 4 4"/></svg></div>
+          <h3>Momentum charts</h3>
+          <p>Win probability and a lead tracker for the NFL and NBA; runs per over and a run worm for cricket.</p>
+        </article>
+        <article class="feature">
+          <div class="icon" style="background:#B7791F" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></div>
+          <h3>Ball by ball and play by play</h3>
+          <p>Every delivery of the over on the card, batters at the crease, the required rate, and when play resumes after stumps.</p>
+        </article>
+        <article class="feature">
+          <div class="icon" style="background:#3B434C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v6.5h14V13"/></svg></div>
+          <h3>Favourites and sharing</h3>
+          <p>Favourite teams join your board a week ahead, and any game can be shared to a group chat as a clean picture.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="look">
+      <h2 id="look">Have a look</h2>
+      <div class="strip">
+        <figure><div class="phone short"><img src="/about/light-scorecard.webp" width="560" height="1111" loading="lazy" alt="Cricket scorecard with the batting team's colours, dismissals under each name and not-out batters marked."></div><figcaption>Scorecards</figcaption></figure>
+        <figure><div class="phone short"><img src="/about/light-plays.webp" width="560" height="1111" loading="lazy" alt="NFL game with a win probability chart and a lead tracker by quarter."></div><figcaption>Momentum</figcaption></figure>
+        <figure><div class="phone short"><img src="/about/light-player.webp" width="560" height="1111" loading="lazy" alt="A quarterback's stats with targets for rushing yards and interceptions."></div><figcaption>Players and targets</figcaption></figure>
+        <figure><div class="phone short"><img src="/about/light-charts.webp" width="560" height="1111" loading="lazy" alt="Cricket ball by ball with a runs-per-over chart."></div><figcaption>Ball by ball</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="how">
+      <h2 id="how">How it's built</h2>
+      <p class="sub">A side project designed to cost nothing to run, however many people use it.</p>
+      <div class="build">
+        <div class="diagram">
+          <svg viewBox="0 0 640 300" role="img" aria-labelledby="dg-title">
+            <title id="dg-title">Phones call one Cloudflare Worker, which serves cached data from ESPN, Squiggle, OpenF1 and API-Football.</title>
+            <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+            <g font-family="Barlow, sans-serif" font-size="13" fill="currentColor" style="color: var(--ink-2)">
+              <rect x="14" y="110" width="128" height="80" rx="14" fill="none" stroke="currentColor" stroke-opacity=".5"/>
+              <text x="78" y="143" text-anchor="middle" font-weight="700" fill="var(--ink)">Phone app</text>
+              <text x="78" y="162" text-anchor="middle">board kept on device</text>
+              <text x="78" y="178" text-anchor="middle">polls only while open</text>
+              <path d="M146 150H196" stroke="currentColor" stroke-width="1.6" marker-end="url(#ar)"/>
+              <rect x="200" y="56" width="214" height="188" rx="16" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+              <text x="307" y="82" text-anchor="middle" font-weight="700" fill="var(--ink)">Cloudflare Worker (free plan)</text>
+              <text x="307" y="108" text-anchor="middle">one data shape for every sport</text>
+              <rect x="218" y="122" width="178" height="30" rx="8" fill="none" stroke="currentColor" stroke-opacity=".4"/>
+              <text x="307" y="142" text-anchor="middle">edge cache: 20 s live, 1 day history</text>
+              <rect x="218" y="160" width="178" height="30" rx="8" fill="none" stroke="currentColor" stroke-opacity=".4"/>
+              <text x="307" y="180" text-anchor="middle">Durable Object: one AFL stream</text>
+              <rect x="218" y="198" width="178" height="30" rx="8" fill="none" stroke="currentColor" stroke-opacity=".4"/>
+              <text x="307" y="218" text-anchor="middle">per-device limit, error logs</text>
+              <path d="M418 92H478M418 134H478M418 176H478M418 218H478" stroke="currentColor" stroke-width="1.6" marker-end="url(#ar)"/>
+              <text x="486" y="96" font-weight="700" fill="var(--ink)">ESPN</text><text x="530" y="96">8 sports</text>
+              <text x="486" y="138" font-weight="700" fill="var(--ink)">Squiggle</text><text x="550" y="138">AFL, live</text>
+              <text x="486" y="180" font-weight="700" fill="var(--ink)">OpenF1</text><text x="540" y="180">F1 timing</text>
+              <text x="486" y="222" font-weight="700" fill="var(--ink)">API-Football</text><text x="486" y="238">backup, ≤90 a day</text>
+            </g>
+          </svg>
+        </div>
+        <ul class="facts">
+          <li><b>$0 to run.</b> One Worker, two Durable Objects and static hosting, all inside Cloudflare's free plan.</li>
+          <li><b>Shared caching.</b> However many people watch a game, ESPN sees one request every 20 seconds.</li>
+          <li><b>No framework.</b> Plain JavaScript modules, hand-drawn SVG charts, an installable web app that opens instantly.</li>
+          <li><b>Tested.</b> 40+ unit tests pin the shape of every data feed, so changes upstream are caught early.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap" id="privacy" aria-labelledby="privacy-h">
+      <h2 id="privacy-h">Privacy</h2>
+      <div class="privacy">
+        <ul>
+          <li><b>No account, no sign-up.</b> Sideline doesn't know who you are.</li>
+          <li><b>Your board stays on your phone.</b> The games you follow, players you track, targets and settings are saved in your browser and never sent anywhere.</li>
+          <li><b>No ads, no analytics, no tracking cookies.</b></li>
+          <li><b>What the server sees:</b> requests for scores (which league or game), and a random code your phone makes up, used only to stop any one device from overloading the service. It isn't linked to your name, email or anything else about you.</li>
+          <li><b>Logs:</b> like any website, the host (Cloudflare) keeps basic request logs, which include your network address, for 3 days so problems can be fixed. They aren't used for anything else.</li>
+        </ul>
+        <p class="note">To clear everything, remove the games from your board, or clear this site's data in your browser settings.</p>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="credits">
+      <h2 id="credits">Data and credits</h2>
+      <p class="sub">Scores and stats from <a href="https://www.espn.com">ESPN</a>, AFL from <a href="https://squiggle.com.au">Squiggle</a>, F1 session timing from <a href="https://openf1.org">OpenF1</a>, and <a href="https://www.api-football.com">API-Football</a> as a backup. Thank you to each of them.</p>
+      <p class="note">Sideline is an independent, non-commercial project. It isn't affiliated with or endorsed by ESPN, Squiggle, OpenF1, Formula 1, the NFL, NBA, AFL, NRL, Premier League, any cricket board or any team. Scores can be delayed or occasionally wrong.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Built by Aryan Chugh.</span>
+      <span><a href="/">Open Sideline</a></span>
+    </div>
+  </footer>
+</body>
+</html>
